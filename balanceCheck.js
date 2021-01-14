@@ -18,4 +18,7 @@ axios.get(url)
     })
     .catch(err => {
         console.log(err);
-    });
+    })
+    .then(() => {
+        // TODO: Get current BTC to USD value and return current estimated value of balance in USD.
+    })
