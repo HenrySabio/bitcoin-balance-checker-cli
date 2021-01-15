@@ -13,8 +13,11 @@ axios.get(url)
         const addrBalance = data.funded_txo_sum - data.spent_txo_sum;
 
         // Logs remaining funds values in satoshis and btc
-        console.log(`This address contains ${addrBalance} satoshis.`);
-        console.log(`This is equal to ${addrBalance/(100000000)} btc.`);
+        console.log(`\nCurrent Address Balance:\n
+    ${addrBalance} Satoshi
+    ${addrBalance/(100000000)} BTC\n`);
+
+        console.warn('Please note, this only reflects the balance of this specific address - NOT the entire wallet.\n')
     })
     .catch(err => {
         console.log(err);
