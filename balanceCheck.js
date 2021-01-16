@@ -20,7 +20,16 @@ axios.all([blockstreamRequest, coindeskRequest])
         console.log(errors);
     })
     .then(() => {
-        const addrBalance = blockstreamResponse.funded_txo_sum - blockstreamResponse.spent_txo_sum;;
-        console.log(addrBalance);
-        console.log(coindeskResponse);
+        const satValue = blockstreamResponse.funded_txo_sum - blockstreamResponse.spent_txo_sum;
+        const btcValue = satValue / 100000000;
+        const fiatValue = btcValue * coindeskResponse;
+
+        console.log(`\nCurrent Address Balance:\n
+     ${satValue} Satoshi
+     ${btcValue} BTC`);
+
+        console.log(`\nCurrent USD Value:\n
+     $${fiatValue.toFixed(2)} at the current rate of $${coindeskResponse} per 1 BTC.\n`);
+
+        console.warn('Please note, this only reflects the balance and value of this specific address - NOT the entire wallet.\n')
     })
