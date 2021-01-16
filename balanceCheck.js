@@ -1,27 +1,26 @@
-const axios = require ('axios');
+const axios = require('axios');
 // Takes in btc address as an argument
 const walletAddr = process.argv[2];
 
 // Defines api endpoint for address data lookup
-const url = `http://blockstream.info/api/address/${walletAddr}`;
+const blockstream = `http://blockstream.info/api/address/${walletAddr}`;
+const coindesk = `https://api.coindesk.com/v1/bpi/currentprice.json`;
 
-// Makes request for address data
-axios.get(url)
-    .then(response => {
-        const data = response.data.chain_stats
-        // Takes total funds sent to address & subtracts spent funds to calculate remaining funds
-        const addrBalance = data.funded_txo_sum - data.spent_txo_sum;
+const blockstreamRequest = axios.get(blockstream);
+const coindeskRequest = axios.get(coindesk);
+let blockstreamResponse,
+    coindeskResponse;
 
-        // Logs remaining funds values in satoshis and btc
-        console.log(`\nCurrent Address Balance:\n
-    ${addrBalance} Satoshi
-    ${addrBalance/(100000000)} BTC\n`);
-
-        console.warn('Please note, this only reflects the balance of this specific address - NOT the entire wallet.\n')
+axios.all([blockstreamRequest, coindeskRequest])
+    .then(res => {
+        blockstreamResponse = res[0].data.chain_stats;
+        coindeskResponse = res[1].data.bpi["USD"].rate_float.toFixed(2);
     })
-    .catch(err => {
-        console.log(err);
+    .catch(errors => {
+        console.log(errors);
     })
     .then(() => {
-        // TODO: Get current BTC to USD value and return current estimated value of balance in USD.
+        const addrBalance = blockstreamResponse.funded_txo_sum - blockstreamResponse.spent_txo_sum;;
+        console.log(addrBalance);
+        console.log(coindeskResponse);
     })
