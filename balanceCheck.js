@@ -1,12 +1,12 @@
 // Import Node Dependencies 
 const axios = require('axios');
 
+// Takes in btc address as an argument
+const walletAddr = process.argv[2];
+
 // Defines api endpoint for address data & current conversion rate
 const blockstream = `http://blockstream.info/api/address/${walletAddr}`;
 const coindesk = `https://api.coindesk.com/v1/bpi/currentprice.json`;
-
-// Takes in btc address as an argument
-const walletAddr = process.argv[2];
 
 if (walletAddr == undefined || walletAddr == null) {
     return console.log("\nPlease provide a bitcoin address.\n");
@@ -37,12 +37,13 @@ if (walletAddr == undefined || walletAddr == null) {
 
             // Log final response to user
             console.log(`\nCurrent Address Balance:\n
-     ${satValue} Satoshi
-     ${btcValue} BTC`);
+    ${satValue} Satoshi
+    ${btcValue} BTC`);
 
             console.log(`\nCurrent USD Value:\n
-     $${fiatValue.toFixed(2)} at the current rate of $${coindeskResponse} per 1 BTC.\n`);
+    $${fiatValue.toFixed(2)} at the current rate of $${coindeskResponse} per 1 BTC.`);
 
-            console.warn('Please note, this only reflects the balance and value of this specific address - NOT the entire wallet.\n')
+            console.log(`\nTo view detailed balance and transaction data please visit:\n
+    https://blockstream.info/address/${walletAddr}\n`);
         })
 }
