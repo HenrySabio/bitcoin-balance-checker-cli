@@ -1,16 +1,16 @@
 // Import Node Dependencies 
 const axios = require('axios');
 
+// Defines api endpoint for address data & current conversion rate
+const blockstream = `http://blockstream.info/api/address/${walletAddr}`;
+const coindesk = `https://api.coindesk.com/v1/bpi/currentprice.json`;
+
 // Takes in btc address as an argument
 const walletAddr = process.argv[2];
 
 if (walletAddr == undefined || walletAddr == null) {
     return console.log("\nPlease provide a bitcoin address.\n");
 } else {
-    // Defines api endpoint for address data lookup
-    const blockstream = `http://blockstream.info/api/address/${walletAddr}`;
-    const coindesk = `https://api.coindesk.com/v1/bpi/currentprice.json`;
-
     // Create get requests
     const blockstreamRequest = axios.get(blockstream);
     const coindeskRequest = axios.get(coindesk);
